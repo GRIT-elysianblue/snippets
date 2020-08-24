@@ -5,6 +5,6 @@ For ($i=0; $i -lt $observed_rule_ids.Length; $i++) {
     If ($i -eq 0) {
         Get-TransportRule -Identity $observed_rule_ids[$i] |Export-Csv -Path .\observed_transport_rules.csv
     } Else {
-        Get-TransportRule -Identity $observed_rule_ids[$i] |Export-Csv -Path .\observed_transport_rules.csv -IncludeTypeInformation -Append
+        Get-TransportRule -Identity $observed_rule_ids[$i] |Export-Csv -Path .\observed_transport_rules.csv -Append
     }
 }
