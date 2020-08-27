@@ -1,6 +1,7 @@
 # Get Temp Directory for Current User Environment and Create Triage Dir
 $temp = $env:TEMP 
 New-Item -Path $temp -Name "GPS_Triage" -ItemType "directory"
+$temp_dir = "$temp\GPS_Triage"
 
 #Get Hostname
 $hostname = $env:COMPUTERNAME
@@ -28,19 +29,20 @@ if (-NOT (Get-Module -ListAvailable -Name PowerForensics)) {
 
 # 1 Acquire NTFS Master File Table via Get-ForensicFileRecord to Snapshot Filesystem Before Any Other Action
 
-$mft_csv = $temp_dir + "\" + $hostname + "-" + $drive + "-" + "\mft.csv"
+$mft_csv = $temp_dir + "\" + $hostname + "-" + $drive + "-" + "mft.csv"
 
-Get-ForensicFileRecord |Export-Csv -NoTypeInformation -Path $mft_csv -Force 
+Get-ForensicFileRecord | Export-Csv -NoTypeInformation -Path $mft_csv -Force 
 
 # Copy System-Level Registry Hives
 
 $hives = @("C:\Windows\System32\config\SYSTEM", "C:\Windows\System32\config\SOFTWARE", "C:\Windows\AppCompat\Programs\Amcache.hve", "C:\Windows\System32\config\SAM")
 
 foreach ($hive in $hives) {
-    $hname = $hive.Split("\")
-    Write-Host "[-] Acquiring $hname[4] Registry Hive from $hive"
-    Copy-ForensicFile -Path $hive -Destination $temp_dir\$hostname-$hname[4]
-    Write-Host "[+] Registry Hive $hname[4] Copied to $temp_dir\$hostname-$hname[4]"
+    $hpath = $hive.Split("\")
+    $hname = $hpath[4]
+    Write-Host "[-] Acquiring $hname Registry Hive from $hive"
+    Copy-ForensicFile -Path $hive -Destination $temp_dir\$hostname-$hname
+    Write-Host "[+] Registry Hive $hname Copied to $temp_dir\$hostname-$hname"
 }
 
 # Get User Directories
@@ -60,7 +62,7 @@ foreach ($user in $user_dirs) {
 $prefetch = Get-ChildItem C:\Windows\Prefetch 
 
 foreach ($pf in $prefetch) {
-    Write-Host "[-] Acquiring Windows Prefetch Files"
+    Write-Host "[-] Acquiring Windows Prefetch File $pf"
     Copy-ForensicFile -Path C:\Windows\Prefetch\$pf -Destination $temp_dir\$hostname-$pf 
     
 }
