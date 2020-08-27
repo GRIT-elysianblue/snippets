@@ -144,7 +144,7 @@ foreach ($user in $user_dirs) {
 
  if (Test-Path "$temp\GPS_Triage.zip"){
      Rename-Item -Path "$temp\GPS_Triage.zip" -NewName "$hostname-GPS_Triage.zip"
-     Write-Host "Triage Archive $temp\GPS_Triage.zip Created Successfully.  Please Upload $temp\GPS_Triage.zip to Location Designated by your GPS DFIR Analyst."
+     Write-Host "Triage Archive $temp\$hostname-GPS_Triage.zip Created Successfully.  Please Upload $temp\$hostname-GPS_Triage.zip to Location Designated by your GPS DFIR Analyst."
  } else {
-     Write-Host "Triage Archive $temp\GPS_Triage.zip Not Created.  Please Contact Your GPS DFIR Analyst and Submit GPS_log.txt for review."
+     Write-Host "Triage Archive $temp\$hostname-GPS_Triage.zip Not Created.  Please Contact Your GPS DFIR Analyst and Submit GPS_log.txt for review."
  } 
